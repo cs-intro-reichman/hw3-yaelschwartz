@@ -24,56 +24,128 @@ public class Algebra {
 	}  
 
 	public static int plus(int x1, int x2) {
-		for(int i = 0; i < x2; i++) {
+		while (x2 > 0) {
 			x1++;
+			x2--;
+		} 
+		while (x2 < 0) {
+			x1--;
+			x2++;
 		}
+
 		return x1;
 	}
 
 	
 	public static int minus(int x1, int x2) {
-		for(int i = 0; i < x2; i++) {
-			x1--;
+		int neg = 0;
+		while (x2 > 0) {
+		x2--;
+		neg--;			
 		}
-		return x1;
+		while (x2 < 0) {
+		x2++;
+		neg++;	
+		}
+
+		return plus(x1, neg);
 	}
 
 	
 	public static int times(int x1, int x2) {
+		if (x1 == 0 || x2 == 0) return 0;
+		
 		int result = 0;
-		for(int i = 0; i < x2; i++) {
-			result = plus(result, x1);
+		boolean negative = false;
+
+		if (x2 < 0) {
+			negative = true;
 		}
+		while (x2 > 0) {
+			result = plus(result, x1);
+			x2--;
+		}
+		if (negative) {
+			result = minus(0, result);
+		}
+
 		return result;
 	}
 
 	// Returns x^n (for n >= ,0)
 	public static int pow(int x, int n) {
 		int result = 1;
-		if(n >= 0) {
-			for(int i = 0; i < n; i++) {
-		    result = times(result, x); 
-			}
-		}
-		return result;
-	}
+
+   		while (n > 0) {
+        result = times(result, x);
+        n--;
+    }
+
+    return result;
+}
 
 	// Returns the integer part of x1 / x2 
 	public static int div(int x1, int x2) {
-		int count = 0;
-		while (x1 >= x2) {
-			x1 = minus(x1, x2);
-			count++;
-		}
-		return count;
-	}
+
+    if (x2 == 0) {
+        System.out.println("Error: division by zero");
+        return 0;
+    }
+
+    boolean negative = false;
+
+    if (x1 < 0) {
+        x1 = minus(0, x1);
+        negative = !negative;
+    }
+    if (x2 < 0) {
+        x2 = minus(0, x2);
+        negative = !negative;
+    }
+
+    int result = 0;
+
+    while (x1 >= x2) {
+        x1 = minus(x1, x2);
+        result++;
+    }
+    if (negative) {
+        result = minus(0, result);
+    }
+
+    return result;
+}
+
 
 	// Returns x1 % x2
 	public static int mod(int x1, int x2) {
-		int q = div (x1, x2);
-		int r = times(q, x2);
-		return minus(x1, r);
-	}	
+
+    if (x2 == 0) {
+        System.out.println("Error: mod by zero");
+        return 0;
+    }
+
+    boolean negative = false;
+
+    if (x1 < 0) {
+        x1 = minus(0, x1);
+        negative = true;
+    }
+    if (x2 < 0) {
+        x2 = minus(0, x2);
+    }
+
+    while (x1 >= x2) {
+        x1 = minus(x1, x2);
+    }
+
+    if (negative) {
+        x1 = minus(0, x1);
+    }
+
+    return x1;
+}
+	
 
 	// Returns the integer part of sqrt(x) 
 	public static int sqrt(int x) {
